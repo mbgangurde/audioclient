@@ -13,5 +13,10 @@
     "name": "application.url",
     "type": "java.lang.String",
     "description": "A description for 'application.url'"
+  },
+  {
+    "name": "download.file.uniqueid",
+    "type": "java.lang.String",
+    "description": "A description for 'download.file.uniqueId'"
   }
 ]}

@@ -25,6 +25,9 @@ public class AudioclientApplication {
 
 	@Value("${download.file.name}")
 	private String downloadFileName;
+	
+	@Value("${download.file.uniqueid}")
+	private String uniqueId;
 
 	private static final Logger log = LoggerFactory.getLogger(AudioclientApplication.class);
 
@@ -40,7 +43,7 @@ public class AudioclientApplication {
 	@Bean
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
-			ByteArrayResource quote = restTemplate.getForObject(applicationUrl + ":" + applicationPort + "/audio/1",
+			ByteArrayResource quote = restTemplate.getForObject(applicationUrl + ":" + applicationPort + "/audio/" + uniqueId,
 					ByteArrayResource.class);
 
 			File file = new File(downloadFileName);
