@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "application.port",
+    "type": "java.lang.String",
+    "description": "A description for 'application.port'"
+  },
+  {
+    "name": "download.file.name",
+    "type": "java.lang.String",
+    "description": "A description for 'download.file.name'"
+  },
+  {
+    "name": "application.url",
+    "type": "java.lang.String",
+    "description": "A description for 'application.url'"
+  }
+]}
