@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,8 +15,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.client.RestTemplate;
 
+import com.mediastore.audioclient.service.AudioclientService;
+
+/**
+ * 
+ * @author mbgangurde
+ *
+ */
+
 @SpringBootApplication
 public class AudioclientApplication {
+
+	@Autowired
+	private AudioclientService audioclientService;
 
 	@Value("${application.url}")
 	private String applicationUrl;
@@ -25,7 +37,7 @@ public class AudioclientApplication {
 
 	@Value("${download.file.name}")
 	private String downloadFileName;
-	
+
 	@Value("${download.file.uniqueid}")
 	private String uniqueId;
 
@@ -43,17 +55,20 @@ public class AudioclientApplication {
 	@Bean
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
-			ByteArrayResource quote = restTemplate.getForObject(applicationUrl + ":" + applicationPort + "/audio/" + uniqueId,
-					ByteArrayResource.class);
+			ByteArrayResource fileData = restTemplate.getForObject(
+					applicationUrl + ":" + applicationPort + "/audio/" + 2, ByteArrayResource.class);
 
 			File file = new File(downloadFileName);
+			
 			try (FileOutputStream fos = new FileOutputStream(file)) {
-				fos.write(quote.getByteArray());
+				fos.write(fileData.getByteArray());
+				audioclientService.playClip(file);
+				
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			log.info(quote.toString());
+			file.delete();
+			log.info(fileData.toString());
 		};
 	}
-
 }
