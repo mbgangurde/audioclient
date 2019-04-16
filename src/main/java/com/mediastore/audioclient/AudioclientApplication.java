@@ -1,8 +1,5 @@
 package com.mediastore.audioclient;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,18 +53,15 @@ public class AudioclientApplication {
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
 			ByteArrayResource fileData = restTemplate.getForObject(
-					applicationUrl + ":" + applicationPort + "/audio/" + 2, ByteArrayResource.class);
+					applicationUrl + ":" + applicationPort + "/audio/" + uniqueId, ByteArrayResource.class);
 
-			File file = new File(downloadFileName);
-			
-			try (FileOutputStream fos = new FileOutputStream(file)) {
-				fos.write(fileData.getByteArray());
-				audioclientService.playClip(file);
-				
+			try {
+
+				audioclientService.playClip(fileData.getInputStream());
+
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			file.delete();
 			log.info(fileData.toString());
 		};
 	}
